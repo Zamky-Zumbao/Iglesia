@@ -6,282 +6,298 @@ import pandas as pd
 # ===== CONFIGURACIÓN =====
 st.set_page_config(
     page_title="Bodega Iglesia",
-    page_icon="https://i.ibb.co/d4NTj1CV/logo.png",
-    layout="wide"
+    page_icon="🏪",
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
-# ===== IDENTIDAD VISUAL =====
-COLOR_PRIMARIO = "#172554"       # Azul institucional
-COLOR_SECUNDARIO = "#2563EB"     # Azul moderno
-COLOR_ACENTO = "#F59E0B"         # Dorado
-COLOR_EXITO = "#16A34A"
-COLOR_PELIGRO = "#DC2626"
-COLOR_FONDO = "#F4F7FB"
-COLOR_TEXTO = "#172033"
+# ===== COLORES =====
+COLOR_LOGO = "#1a237e"
+COLOR_FONDO = "#0d47a1"
+COLOR_PRIMARIO = "#1E3A8A"
+COLOR_SECUNDARIO = "#3B82F6"
+COLOR_ACENTO = "#06B6D4"
+COLOR_EXITO = "#10B981"
+COLOR_ALERTA = "#F59E0B"
+COLOR_PELIGRO = "#EF4444"
+COLOR_TEXTO = "#1E293B"
 
-# ===== ESTILO PROFESIONAL =====
+# ===== CSS =====
 st.markdown(f"""
 <style>
-    /* ==============================
-       ESTRUCTURA GENERAL
-       ============================== */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fredoka:wght@600;700&display=swap');
+
+    * {{
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }}
+
+    :root {{
+        --primario: {COLOR_PRIMARIO};
+        --secundario: {COLOR_SECUNDARIO};
+        --acento: {COLOR_ACENTO};
+        --exito: {COLOR_EXITO};
+        --alerta: {COLOR_ALERTA};
+        --peligro: {COLOR_PELIGRO};
+        --texto: {COLOR_TEXTO};
+        --durazno: #F4A97F;
+        --radio: 16px;
+        --sombra: 0 8px 24px rgba(15, 23, 42, 0.10);
+        --sombra-hover: 0 12px 32px rgba(15, 23, 42, 0.18);
+    }}
+
+    /* ===== FONDO GENERAL ===== */
     .stApp {{
         background:
-            radial-gradient(circle at 15% 0%, rgba(37,99,235,.10), transparent 28%),
-            radial-gradient(circle at 90% 15%, rgba(245,158,11,.08), transparent 25%),
-            linear-gradient(180deg, #f8fafc 0%, {COLOR_FONDO} 100%);
-        color: {COLOR_TEXTO};
+            radial-gradient(circle at 15% 0%, rgba(59,130,246,0.35), transparent 45%),
+            radial-gradient(circle at 90% 10%, rgba(6,182,212,0.25), transparent 40%),
+            linear-gradient(160deg, #0B1E4D 0%, {COLOR_PRIMARIO} 45%, #0d47a1 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
     }}
 
-    .main .block-container {{
-        max-width: 1250px;
-        padding-top: 1.2rem;
-        padding-bottom: 3rem;
+    /* Limita el ancho en pantallas grandes para que no se vea "estirado" en tablet/desktop */
+    .block-container {{
+        max-width: 720px;
+        padding-top: 1.2rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin: 0 auto;
     }}
 
-    /* Ocultar decoración superior de Streamlit */
-    [data-testid="stDecoration"] {{ display: none; }}
-    [data-testid="stToolbar"] {{ visibility: hidden; }}
-
-    /* ==============================
-       HEADER
-       ============================== */
-    .header-shell {{
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(135deg, {COLOR_PRIMARIO} 0%, #1e3a8a 55%, {COLOR_SECUNDARIO} 100%);
-        border-radius: 24px;
-        padding: 24px 30px;
-        margin-bottom: 24px;
-        box-shadow: 0 15px 40px rgba(23,37,84,.18);
+    #MainMenu, footer[data-testid="stFooter"], header[data-testid="stHeader"] {{
+        background: transparent;
     }}
 
-    .header-shell::after {{
-        content: "";
-        position: absolute;
-        width: 240px;
-        height: 240px;
-        border-radius: 50%;
-        background: rgba(255,255,255,.07);
-        right: -70px;
-        top: -100px;
+    /* ===== BOTONES ===== */
+    .stButton > button {{
+        border-radius: 14px !important;
+        border: 1px solid rgba(255,255,255,0.6) !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        letter-spacing: 0.2px;
+        padding: 16px 14px !important;
+        min-height: 56px;
+        line-height: 1.25 !important;
+        white-space: pre-line !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease !important;
+        box-shadow: var(--sombra) !important;
+        width: 100% !important;
+        background: rgba(255, 255, 255, 0.97) !important;
+        color: var(--primario) !important;
+    }}
+    .stButton > button:hover {{
+        transform: translateY(-2px) !important;
+        box-shadow: var(--sombra-hover) !important;
+        background: linear-gradient(135deg, var(--primario), var(--secundario)) !important;
+        color: white !important;
+        border-color: transparent !important;
+    }}
+    .stButton > button:active {{
+        transform: translateY(0) scale(0.98) !important;
+    }}
+    /* Botones de acción principal (Registrar / Guardar) resaltados */
+    .stButton > button:has(div p:first-child:only-child) {{}}
+
+    /* ===== BOTONES MENÚ PRINCIPAL (compactos, 1 fila) ===== */
+    .st-key-home-menu .stButton > button {{
+        min-height: 40px !important;
+        padding: 8px 4px !important;
+        font-size: clamp(11px, 3.4vw, 14px) !important;
+        white-space: nowrap !important;
+        gap: 4px;
+    }}
+    .st-key-home-menu div[data-testid="column"] {{
+        padding: 0 3px !important;
     }}
 
+    /* ===== HEADER ===== */
+    .app-header {{
+        text-align: center;
+        padding: 6px 0 2px 0;
+    }}
     .header-container {{
-        position: relative;
-        z-index: 2;
         display: flex;
         align-items: center;
-        gap: 18px;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
     }}
-
     .header-container img {{
-        width: 72px;
-        height: 72px;
-        object-fit: contain;
-        border-radius: 18px;
-        background: white;
-        padding: 1px;
-        box-shadow: 0 8px 25px rgba(0,0,0,.10);
+        width: clamp(48px, 12vw, 68px);
+        height: clamp(48px, 12vw, 68px);
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
     }}
-
     .header-title {{
-        font-size: 32px;
-        line-height: 1.1;
-        font-weight: 850;
-        color: white !important;
-        letter-spacing: .4px;
-        margin: 0;
-    }}
-
-    .header-subtitle {{
-        position: relative;
-        z-index: 2;
-        margin: 8px 0 0 90px;
-        color: rgba(255,255,255,.82);
-        font-size: 14px;
-        letter-spacing: .3px;
-    }}
-
-    /* ==============================
-       TÍTULOS Y SECCIONES
-       ============================== */
-    h1, h2, h3, h4 {{
-        color: {COLOR_PRIMARIO} !important;
-        font-weight: 800 !important;
-    }}
-
-    .section-title {{
-        color: {COLOR_PRIMARIO};
-        font-size: 26px;
-        font-weight: 800;
-        margin: 6px 0 16px;
-    }}
-
-    .section-caption {{
-        color: #64748b;
-        font-size: 13px;
-        margin-top: -10px;
-        margin-bottom: 18px;
-    }}
-
-    /* ==============================
-       TARJETAS
-       ============================== */
-    .card {{
-        background: rgba(255,255,255,.94);
-        border: 1px solid #e5eaf2;
-        border-radius: 18px;
-        padding: 20px;
-        box-shadow: 0 8px 25px rgba(15,23,42,.07);
-        margin-bottom: 16px;
-    }}
-
-    .metric-card {{
-        background: white !important;
-        border: 1px solid #e6ebf2;
-        border-radius: 18px;
-        padding: 18px 20px;
-        min-height: 105px;
-        box-shadow: 0 7px 22px rgba(15,23,42,.06);
-        border-top: 4px solid {COLOR_SECUNDARIO};
-        transition: transform .18s ease, box-shadow .18s ease;
-    }}
-
-    .metric-card:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(15,23,42,.10);
-    }}
-
-    .metric-card.green {{ border-top-color: {COLOR_EXITO}; }}
-    .metric-card.blue {{ border-top-color: {COLOR_SECUNDARIO}; }}
-    .metric-card.orange {{ border-top-color: {COLOR_ACENTO}; }}
-
-    .metric-value {{
-        font-size: 30px;
-        font-weight: 850;
-        color: {COLOR_PRIMARIO};
-        margin-top: 5px;
-    }}
-
-    .metric-label {{
-        color: #64748b;
-        font-size: 12px;
+        font-family: 'Fredoka', 'Inter', sans-serif;
+        font-size: clamp(24px, 7vw, 38px);
         font-weight: 700;
+        color: var(--durazno) !important;
+        margin: 0;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+        letter-spacing: 0.5px;
         text-transform: uppercase;
-        letter-spacing: .7px;
     }}
 
-    /* ==============================
-       BOTONES
-       ============================== */
-    .stButton > button {{
-        width: 100%;
-        min-height: 54px;
-        border-radius: 14px !important;
-        border: 1px solid #dbe3ef !important;
-        background: white !important;
-        color: {COLOR_PRIMARIO} !important;
-        font-weight: 750 !important;
-        font-size: 15px !important;
-        box-shadow: 0 5px 15px rgba(15,23,42,.06) !important;
-        transition: all .18s ease !important;
-    }}
-
-    .stButton > button:hover {{
-        transform: translateY(-2px);
-        border-color: {COLOR_SECUNDARIO} !important;
-        background: #eff6ff !important;
-        color: {COLOR_SECUNDARIO} !important;
-        box-shadow: 0 9px 22px rgba(37,99,235,.14) !important;
-    }}
-
-    /* Botones de acción */
-    .stButton > button:focus {{
-        box-shadow: 0 0 0 3px rgba(37,99,235,.18) !important;
-    }}
-
-    /* ==============================
-       INPUTS
-       ============================== */
-    div[data-baseweb="select"] > div,
-    div[data-baseweb="input"],
-    .stNumberInput input,
-    .stTextInput input {{
-        border-radius: 12px !important;
-        border: 1px solid #d8e0eb !important;
-        background: white !important;
-    }}
-
-    label {{
-        font-weight: 650 !important;
-        color: #334155 !important;
-    }}
-
-    /* ==============================
-       TABLAS
-       ============================== */
-    [data-testid="stDataFrame"] {{
-        border-radius: 14px;
-        overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 5px 18px rgba(15,23,42,.05);
-    }}
-
-    /* ==============================
-       ALERTAS / MENSAJES
-       ============================== */
-    .stAlert {{
-        border-radius: 14px !important;
-        border: 1px solid rgba(148,163,184,.25) !important;
-    }}
-
-    /* ==============================
-       REGISTROS
-       ============================== */
-    .movement-card {{
-        background: white;
-        border: 1px solid #e7ecf3;
-        border-left: 4px solid {COLOR_SECUNDARIO};
-        border-radius: 13px;
-        padding: 13px 16px;
-        margin-bottom: 9px;
-        box-shadow: 0 4px 13px rgba(15,23,42,.045);
-    }}
-
-    .success-card {{
-        background: linear-gradient(135deg, #f0fdf4, #ffffff);
-        border: 1px solid #bbf7d0;
-        border-left: 5px solid {COLOR_EXITO};
-        border-radius: 15px;
-        padding: 17px;
-    }}
-
-    /* ==============================
-       FOOTER
-       ============================== */
-    .footer {{
-        text-align: center;
-        color: #64748b;
-        font-size: 12px;
-        margin-top: 35px;
-        padding: 16px;
-        border-top: 1px solid #e2e8f0;
-    }}
-
-    /* Separadores más suaves */
     hr {{
         border: none;
-        border-top: 1px solid #e5eaf2;
-        margin: 20px 0;
+        border-top: 1px solid rgba(255,255,255,0.18) !important;
+        margin: 1.1rem 0 !important;
     }}
 
-    /* Móvil */
-    @media (max-width: 700px) {{
-        .header-shell {{ padding: 20px; border-radius: 18px; }}
-        .header-title {{ font-size: 24px; }}
-        .header-container img {{ width: 58px; height: 58px; }}
-        .header-subtitle {{ margin-left: 76px; }}
+    /* ===== TITULOS DE SECCIÓN ===== */
+    h1, h2, h3, h4 {{
+        color: white !important;
+        font-weight: 800 !important;
+    }}
+    h3 {{
+        font-size: clamp(18px, 4.5vw, 22px) !important;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }}
+    h4 {{
+        font-size: clamp(15px, 4vw, 17px) !important;
+        color: rgba(255,255,255,0.95) !important;
+        margin-top: 0.6rem !important;
+    }}
+
+    /* ===== TARJETAS DE MÉTRICAS ===== */
+    .metric-card {{
+        background: rgba(255, 255, 255, 0.97) !important;
+        border-radius: var(--radio);
+        padding: 16px 10px;
+        text-align: center;
+        box-shadow: var(--sombra);
+        border-top: 4px solid var(--primario);
+        margin-bottom: 12px;
+        transition: transform 0.15s ease;
+    }}
+    .metric-card:hover {{ transform: translateY(-3px); }}
+    .metric-card.green {{ border-top-color: var(--exito); }}
+    .metric-card.blue {{ border-top-color: var(--acento); }}
+    .metric-card.orange {{ border-top-color: var(--alerta); }}
+
+    .metric-value {{
+        font-size: clamp(22px, 6vw, 30px);
+        font-weight: 800;
+        margin: 4px 0 2px 0;
+        color: var(--texto);
+    }}
+    .metric-label {{
+        font-size: 11.5px;
+        color: #64748B;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }}
+
+    /* ===== TARJETA DE MOVIMIENTO / REGISTRO ===== */
+    .item-card {{
+        background: rgba(255,255,255,0.97);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        border-left: 4px solid var(--secundario);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }}
+    .item-card .hora {{
+        color: var(--primario);
+        font-weight: 700;
+    }}
+    .item-card .motivo {{
+        color: #64748B;
+        font-size: 12.5px;
+    }}
+    .success-box {{
+        background: rgba(220, 252, 231, 0.97) !important;
+        border-radius: var(--radio);
+        padding: 16px;
+        border-left: 5px solid var(--exito);
+        box-shadow: var(--sombra);
+        color: var(--texto);
+    }}
+
+    /* ===== FOOTER ===== */
+    .footer {{
+        text-align: center;
+        color: rgba(255,255,255,0.85);
+        font-size: 12.5px;
+        font-weight: 500;
+        margin-top: 20px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: var(--radio);
+        padding: 14px;
+        backdrop-filter: blur(6px);
+        line-height: 1.7;
+    }}
+
+    /* ===== INPUTS ===== */
+    .stSelectbox > div > div, .stNumberInput > div > div, .stTextInput > div > div {{
+        background: rgba(255,255,255,0.97) !important;
+        border-radius: 12px !important;
+        box-shadow: var(--sombra);
+    }}
+    label, .stMarkdown p {{
+        color: white !important;
+        font-weight: 600 !important;
+    }}
+    .stSelectbox label, .stNumberInput label, .stTextInput label {{
+        font-size: 13.5px !important;
+    }}
+
+    /* ===== ALERTAS / MENSAJES ===== */
+    .stAlert {{
+        background: rgba(255,255,255,0.97) !important;
+        backdrop-filter: blur(6px);
+        border-radius: var(--radio) !important;
+        box-shadow: var(--sombra);
+    }}
+    .stAlert p {{ color: var(--texto) !important; font-weight: 500 !important; }}
+
+    /* ===== TABLA / DATAFRAME ===== */
+    [data-testid="stDataFrame"] {{
+        border-radius: var(--radio);
+        overflow: hidden;
+        box-shadow: var(--sombra);
+    }}
+
+    /* ===== RESPONSIVE: CELULARES ===== */
+    @media (max-width: 480px) {{
+        .block-container {{
+            padding-left: 0.6rem;
+            padding-right: 0.6rem;
+            padding-top: 0.8rem !important;
+        }}
+        .stButton > button {{
+            font-size: 14px !important;
+            padding: 14px 8px !important;
+            min-height: 52px;
+        }}
+        .header-container img {{
+            width: 46px;
+            height: 46px;
+        }}
+        div[data-testid="column"] {{
+            padding: 0 4px !important;
+        }}
+    }}
+
+    /* ===== RESPONSIVE: TABLETS ===== */
+    @media (min-width: 481px) and (max-width: 1024px) {{
+        .block-container {{
+            max-width: 680px;
+        }}
+    }}
+
+    /* ===== PANTALLAS GRANDES ===== */
+    @media (min-width: 1025px) {{
+        .block-container {{
+            max-width: 760px;
+        }}
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -290,21 +306,15 @@ st.markdown(f"""
 LOGO_URL = "https://i.ibb.co/d4NTj1CV/logo.png"
 
 st.markdown(f"""
-<div class="header-shell">
+<div class="app-header">
     <div class="header-container">
         <img src="{LOGO_URL}" alt="Logo Iglesia">
-        <div>
-            <div class="header-title">BODEGA IGLESIA</div>
-            <div style="color:rgba(255,255,255,.72);font-size:13px;margin-top:5px;">
-                Control de inventario y movimientos
-            </div>
-        </div>
-    </div>
-    <div class="header-subtitle">
-        Administración simple · ordenada · segura
+        <span class="header-title">Control Inventario</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown("---")
 
 # ===== BASE DE DATOS =====
 DB_NAME = "inventario.db"
@@ -337,29 +347,74 @@ def init_db():
     
     c.execute("SELECT COUNT(*) FROM productos")
     if c.fetchone()[0] == 0:
-        productos_ejemplo = [
-            ('Azúcar 1kg', 'Despensa', 50, 4, 'unidades'),
-            ('Café 500gr', 'Despensa', 50, 4, 'unidades'),
-            ('Té caja 100 bolsas', 'Despensa', 50, 4, 'cajas'),
-            ('Endulzante botella', 'Despensa', 50, 4, 'botellas'),
-            ('Servilletas 100un', 'Limpieza', 50, 4, 'paquetes'),
-            ('Galletas Mini', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Costa', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Frac', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Gretel', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Donuts', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Obsesion', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Kuky', 'Galletas', 50, 4, 'paquetes'),
-            ('Galletas Triton', 'Galletas', 50, 4, 'paquetes'),
-            ('Confort', 'Limpieza', 50, 4, 'rollos'),
-            ('Toalla Nova', 'Limpieza', 50, 4, 'paquetes'),
-            ('Bolsa B 70x50', 'Bolsas', 50, 4, 'unidades'),
-            ('Bolsa B 70x80', 'Bolsas', 50, 4, 'unidades'),
-            ('Paños Des. Multiuso', 'Limpieza', 50, 4, 'paquetes'),
+        productos_excel = [
+            # ===== ASEO (26 artículos) =====
+            ('Bolsa Basura 50x70', 'ASEO', 50, 4, 'unidades'),
+            ('Bolsa Basura 70x90', 'ASEO', 50, 4, 'unidades'),
+            ('Bolsa Basura 90x120', 'ASEO', 50, 4, 'unidades'),
+            ('Bolsa Camiseta', 'ASEO', 50, 4, 'unidades'),
+            ('Cloro Gel', 'ASEO', 50, 4, 'unidades'),
+            ('Desengrasante', 'ASEO', 50, 4, 'unidades'),
+            ('Desinfectante Baño', 'ASEO', 50, 4, 'unidades'),
+            ('Desodorante Ambiental', 'ASEO', 50, 4, 'unidades'),
+            ('Detergente Polvo', 'ASEO', 50, 4, 'unidades'),
+            ('Escobas Pisos', 'ASEO', 50, 4, 'unidades'),
+            ('Esponjas Lavaplatos', 'ASEO', 50, 4, 'unidades'),
+            ('Guantes Latex', 'ASEO', 50, 4, 'unidades'),
+            ('Insecticiada', 'ASEO', 50, 4, 'unidades'),
+            ('Jabón', 'ASEO', 50, 4, 'unidades'),
+            ('Lava Lozas', 'ASEO', 50, 4, 'unidades'),
+            ('Limpia Piso Poet', 'ASEO', 50, 4, 'unidades'),
+            ('Limpia Vidrio', 'ASEO', 50, 4, 'unidades'),
+            ('Limpiador en Crema', 'ASEO', 50, 4, 'unidades'),
+            ('Lustra Muebles', 'ASEO', 50, 4, 'unidades'),
+            ('Palas Aseo', 'ASEO', 50, 4, 'unidades'),
+            ('Paños Amarillos', 'ASEO', 50, 4, 'unidades'),
+            ('Removedor de Sarro', 'ASEO', 50, 4, 'unidades'),
+            ('Toalla Desinfectante', 'ASEO', 50, 4, 'unidades'),
+            ('Trapero Micro Fibra', 'ASEO', 50, 4, 'unidades'),
+            ('Traperos Húmedos', 'ASEO', 50, 4, 'unidades'),
+            ('Virutillas', 'ASEO', 50, 4, 'unidades'),
+            
+            # ===== BAÑO (3 artículos) =====
+            ('Papel Higiénico', 'BAÑO', 50, 4, 'unidades'),
+            ('Toalla Papel 100 Mts', 'BAÑO', 50, 4, 'unidades'),
+            ('Toalla Papel Rollo Baño', 'BAÑO', 50, 4, 'unidades'),
+            
+            # ===== CONSUMIBLES (15 artículos) =====
+            ('Aceite', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Agua Mineral con Gas', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Agua Mineral sin Gas', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Azúcar', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Café', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Dulces Bienvenida', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Endulzante', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Galletas Mini', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Galletas Variedades Bienvenida', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Jugo Instantáneo', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Jugos en Caja Individual', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Latas de Bebida', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Pan', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Sal', 'CONSUMIBLES', 50, 4, 'unidades'),
+            ('Té Caja 100 Bolsas', 'CONSUMIBLES', 50, 4, 'unidades'),
+            
+            # ===== DESECHABLES (8 artículos) =====
+            ('Cucharas Chicas Plásticas', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Platos Cartón', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Revolvedores', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Servilletas 100 Unidades', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Vasos Plásticos Desechables', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Vasos Térmicos', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Plato Grande Plásticos', 'DESECHABLES', 50, 4, 'unidades'),
+            ('Bandejas de Cartón', 'DESECHABLES', 50, 4, 'unidades'),
+            
+            # ===== OTROS (1 artículo) =====
+            ('Gas de 11 Kilos', 'OTROS', 50, 4, 'unidades'),
         ]
+        
         c.executemany('''INSERT INTO productos 
             (nombre, categoria, stock_actual, stock_minimo, unidad) 
-            VALUES (?,?,?,?,?)''', productos_ejemplo)
+            VALUES (?,?,?,?,?)''', productos_excel)
     
     conn.commit()
     conn.close()
@@ -501,28 +556,29 @@ if 'ultimo_registro' not in st.session_state:
 # ===== MENÚ PRINCIPAL =====
 # ============================================
 def menu_principal():
-    st.markdown('<div class="section-title">Panel principal</div><div class="section-caption">Selecciona una operación para comenzar.</div>', unsafe_allow_html=True)
+    st.markdown("### 📋 Selecciona una opción:")
     
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("📤\n1. SALIDA DE\nPRODUCTOS", use_container_width=True):
-            st.session_state.pagina = "submenu_salida"
-            st.session_state.menu_anterior = "principal"
-            st.session_state.salida_registrada = False
-            st.rerun()
-    
-    with col2:
-        if st.button("📦\n2. VER\nSTOCK", use_container_width=True):
-            st.session_state.pagina = "submenu_stock"
-            st.session_state.menu_anterior = "principal"
-            st.rerun()
-    
-    with col3:
-        if st.button("📋\n3. SALIDA\nDE HOY", use_container_width=True):
-            st.session_state.pagina = "submenu_hoy"
-            st.session_state.menu_anterior = "principal"
-            st.rerun()
+    with st.container(key="home-menu"):
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("📤 Salida", use_container_width=True):
+                st.session_state.pagina = "submenu_salida"
+                st.session_state.menu_anterior = "principal"
+                st.session_state.salida_registrada = False
+                st.rerun()
+        
+        with col2:
+            if st.button("📦 Stock", use_container_width=True):
+                st.session_state.pagina = "submenu_stock"
+                st.session_state.menu_anterior = "principal"
+                st.rerun()
+        
+        with col3:
+            if st.button("📋 Hoy", use_container_width=True):
+                st.session_state.pagina = "submenu_hoy"
+                st.session_state.menu_anterior = "principal"
+                st.rerun()
     
     st.markdown("---")
     st.markdown(f"""
@@ -532,11 +588,9 @@ def menu_principal():
     </div>
     """, unsafe_allow_html=True)
 
-# ============================================
-# ===== SUBMENÚ: SALIDA DE PRODUCTOS ========
-# ============================================
+# ===== SUBMENÚ: SALIDA DE PRODUCTOS =====
 def submenu_salida():
-    st.markdown('<div class="section-title">📤 Salida de productos</div><div class="section-caption">Registra, consulta y administra las salidas de inventario.</div>', unsafe_allow_html=True)
+    st.markdown("### 📤 SALIDA DE PRODUCTOS")
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
@@ -566,11 +620,9 @@ def submenu_salida():
             st.session_state.pagina = "ajustar_stock"
             st.rerun()
 
-# ============================================
-# ===== SUBMENÚ: VER STOCK ==================
-# ============================================
+# ===== SUBMENÚ: VER STOCK =====
 def submenu_stock():
-    st.markdown('<div class="section-title">📦 Inventario</div><div class="section-caption">Consulta el stock disponible y detecta productos críticos.</div>', unsafe_allow_html=True)
+    st.markdown("### 📦 VER STOCK")
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
@@ -579,7 +631,6 @@ def submenu_stock():
     
     st.markdown("---")
     
-    # ===== MÉTRICAS =====
     resumen = get_resumen()
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -626,11 +677,9 @@ def submenu_stock():
             st.session_state.pagina = "ver_salidas_hoy"
             st.rerun()
 
-# ============================================
-# ===== SUBMENÚ: SALIDA DE HOY ==============
-# ============================================
+# ===== SUBMENÚ: SALIDA DE HOY =====
 def submenu_hoy():
-    st.markdown('<div class="section-title">📋 Movimientos de hoy</div><div class="section-caption">Resumen de las operaciones registradas durante el día.</div>', unsafe_allow_html=True)
+    st.markdown("### 📋 SALIDA DE HOY")
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
@@ -653,9 +702,9 @@ def submenu_hoy():
         st.markdown("#### 📤 Salidas registradas hoy:")
         for s in salidas:
             st.markdown(f"""
-            <div class="movement-card">
-                <b>🕐 {s[0][11:16]}</b> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
-                <span style="color: #666; font-size: 13px;">Motivo: {s[4]}</span>
+            <div class="item-card">
+                <span class="hora">🕐 {s[0][11:16]}</span> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
+                <span class="motivo">Motivo: {s[4]}</span>
             </div>
             """, unsafe_allow_html=True)
     else:
@@ -674,12 +723,12 @@ def submenu_hoy():
             st.rerun()
 
 # ============================================
-# ===== ACCIONES =============================
+# ===== ACCIONES =====
 # ============================================
 
 # --- REGISTRAR SALIDA ---
 def registrar_salida_accion():
-    st.markdown('<div class="section-title">✏️ Registrar salida</div><div class="section-caption">Ingresa los datos del producto que será retirado.</div>', unsafe_allow_html=True)
+    st.markdown("### ✏️ REGISTRAR SALIDA")
     
     if st.button("🔙 VOLVER AL SUBMENÚ", use_container_width=True):
         st.session_state.pagina = "submenu_salida"
@@ -749,7 +798,7 @@ def registrar_salida_accion():
         ult = st.session_state.ultimo_registro
         st.markdown("---")
         st.markdown(f"""
-        <div class="success-card">
+        <div class="success-box">
             <b>✅ Última salida registrada:</b><br>
             📦 {ult['producto']} | <b>-{ult['cantidad']}</b> {ult['unidad']}<br>
             📝 Motivo: {ult['motivo']}<br>
@@ -763,7 +812,7 @@ def registrar_salida_accion():
 
 # --- VER STOCK COMPLETO ---
 def ver_stock_completo():
-    st.markdown('<div class="section-title">📦 Stock completo</div><div class="section-caption">Inventario organizado por categoría.</div>', unsafe_allow_html=True)
+    st.markdown("### 📦 STOCK COMPLETO")
     
     if st.button("🔙 VOLVER", use_container_width=True):
         if st.session_state.menu_anterior == "principal":
@@ -798,7 +847,7 @@ def ver_stock_completo():
 
 # --- STOCK CRÍTICO ---
 def ver_criticos():
-    st.markdown('<div class="section-title">⚠️ Stock crítico</div><div class="section-caption">Productos que se encuentran bajo el mínimo configurado.</div>', unsafe_allow_html=True)
+    st.markdown("### ⚠️ STOCK CRÍTICO")
     
     if st.button("🔙 VOLVER", use_container_width=True):
         st.session_state.pagina = "submenu_salida"
@@ -817,7 +866,7 @@ def ver_criticos():
     else:
         st.success("✅ ¡Todos los productos están en niveles adecuados!")
 
-# --- SALIDAS DE HOY (vista detallada) ---
+# --- SALIDAS DE HOY ---
 def ver_salidas_hoy():
     st.markdown("### 📋 SALIDAS DE HOY")
     
@@ -832,9 +881,9 @@ def ver_salidas_hoy():
         total = 0
         for s in salidas:
             st.markdown(f"""
-            <div class="movement-card">
-                <b>🕐 {s[0][11:16]}</b> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
-                <span style="color: #666; font-size: 13px;">Motivo: {s[4]}</span>
+            <div class="item-card">
+                <span class="hora">🕐 {s[0][11:16]}</span> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
+                <span class="motivo">Motivo: {s[4]}</span>
             </div>
             """, unsafe_allow_html=True)
             total += s[2]
@@ -844,7 +893,7 @@ def ver_salidas_hoy():
 
 # --- AJUSTAR STOCK ---
 def ajustar_stock():
-    st.markdown('<div class="section-title">✏️ Ajustar stock</div><div class="section-caption">Corrige existencias dejando registro para auditoría.</div>', unsafe_allow_html=True)
+    st.markdown("### ✏️ AJUSTAR STOCK")
     st.warning("⚠️ Este cambio quedará registrado para auditoría")
     
     if st.button("🔙 VOLVER", use_container_width=True):
