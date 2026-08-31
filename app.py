@@ -6,88 +6,304 @@ import pandas as pd
 # ===== CONFIGURACIÓN =====
 st.set_page_config(
     page_title="Bodega Iglesia",
-    page_icon="🏪",
-    layout="centered"
+    page_icon="https://i.ibb.co/d4NTj1CV/logo.png",
+    layout="wide"
 )
 
-# ===== CSS =====
-st.markdown("""
+# ===== IDENTIDAD VISUAL =====
+COLOR_PRIMARIO = "#172554"       # Azul institucional
+COLOR_SECUNDARIO = "#2563EB"     # Azul moderno
+COLOR_ACENTO = "#F59E0B"         # Dorado
+COLOR_EXITO = "#16A34A"
+COLOR_PELIGRO = "#DC2626"
+COLOR_FONDO = "#F4F7FB"
+COLOR_TEXTO = "#172033"
+
+# ===== ESTILO PROFESIONAL =====
+st.markdown(f"""
 <style>
-    .stApp { background-color: #f0f2f6; }
-    
-    .card {
+    /* ==============================
+       ESTRUCTURA GENERAL
+       ============================== */
+    .stApp {{
+        background:
+            radial-gradient(circle at 15% 0%, rgba(37,99,235,.10), transparent 28%),
+            radial-gradient(circle at 90% 15%, rgba(245,158,11,.08), transparent 25%),
+            linear-gradient(180deg, #f8fafc 0%, {COLOR_FONDO} 100%);
+        color: {COLOR_TEXTO};
+    }}
+
+    .main .block-container {{
+        max-width: 1250px;
+        padding-top: 1.2rem;
+        padding-bottom: 3rem;
+    }}
+
+    /* Ocultar decoración superior de Streamlit */
+    [data-testid="stDecoration"] {{ display: none; }}
+    [data-testid="stToolbar"] {{ visibility: hidden; }}
+
+    /* ==============================
+       HEADER
+       ============================== */
+    .header-shell {{
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, {COLOR_PRIMARIO} 0%, #1e3a8a 55%, {COLOR_SECUNDARIO} 100%);
+        border-radius: 24px;
+        padding: 24px 30px;
+        margin-bottom: 24px;
+        box-shadow: 0 15px 40px rgba(23,37,84,.18);
+    }}
+
+    .header-shell::after {{
+        content: "";
+        position: absolute;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.07);
+        right: -70px;
+        top: -100px;
+    }}
+
+    .header-container {{
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }}
+
+    .header-container img {{
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+        border-radius: 18px;
         background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-        margin-bottom: 15px;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    
-    .stButton > button {
-        border-radius: 12px !important;
-        border: none !important;
-        font-weight: 600 !important;
-        padding: 14px 20px !important;
-        font-size: 16px !important;
-        transition: all 0.2s !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
-        width: 100% !important;
-    }
-    .stButton > button:hover {
-        transform: scale(1.02) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-    }
-    
-    .main-title {
+        padding: 1px;
+        box-shadow: 0 8px 25px rgba(0,0,0,.10);
+    }}
+
+    .header-title {{
         font-size: 32px;
-        font-weight: 800;
-        text-align: center;
-        background: linear-gradient(135deg, #FF4B4B, #FF6B6B);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 5px;
-    }
-    .sub-title {
-        text-align: center;
-        color: #666;
+        line-height: 1.1;
+        font-weight: 850;
+        color: white !important;
+        letter-spacing: .4px;
+        margin: 0;
+    }}
+
+    .header-subtitle {{
+        position: relative;
+        z-index: 2;
+        margin: 8px 0 0 90px;
+        color: rgba(255,255,255,.82);
         font-size: 14px;
-        font-weight: 400;
-    }
-    
-    .footer {
-        text-align: center;
-        color: #999;
+        letter-spacing: .3px;
+    }}
+
+    /* ==============================
+       TÍTULOS Y SECCIONES
+       ============================== */
+    h1, h2, h3, h4 {{
+        color: {COLOR_PRIMARIO} !important;
+        font-weight: 800 !important;
+    }}
+
+    .section-title {{
+        color: {COLOR_PRIMARIO};
+        font-size: 26px;
+        font-weight: 800;
+        margin: 6px 0 16px;
+    }}
+
+    .section-caption {{
+        color: #64748b;
+        font-size: 13px;
+        margin-top: -10px;
+        margin-bottom: 18px;
+    }}
+
+    /* ==============================
+       TARJETAS
+       ============================== */
+    .card {{
+        background: rgba(255,255,255,.94);
+        border: 1px solid #e5eaf2;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(15,23,42,.07);
+        margin-bottom: 16px;
+    }}
+
+    .metric-card {{
+        background: white !important;
+        border: 1px solid #e6ebf2;
+        border-radius: 18px;
+        padding: 18px 20px;
+        min-height: 105px;
+        box-shadow: 0 7px 22px rgba(15,23,42,.06);
+        border-top: 4px solid {COLOR_SECUNDARIO};
+        transition: transform .18s ease, box-shadow .18s ease;
+    }}
+
+    .metric-card:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(15,23,42,.10);
+    }}
+
+    .metric-card.green {{ border-top-color: {COLOR_EXITO}; }}
+    .metric-card.blue {{ border-top-color: {COLOR_SECUNDARIO}; }}
+    .metric-card.orange {{ border-top-color: {COLOR_ACENTO}; }}
+
+    .metric-value {{
+        font-size: 30px;
+        font-weight: 850;
+        color: {COLOR_PRIMARIO};
+        margin-top: 5px;
+    }}
+
+    .metric-label {{
+        color: #64748b;
         font-size: 12px;
-        margin-top: 30px;
-        padding-top: 15px;
-        border-top: 1px solid #eee;
-    }
-    
-    .metric-card {
-        background: white;
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border-left: 4px solid #FF4B4B;
-        margin-bottom: 10px;
-    }
-    .metric-card.green { border-left-color: #00C853; }
-    .metric-card.blue { border-left-color: #2979FF; }
-    .metric-card.orange { border-left-color: #FF9100; }
-    
-    .metric-value {
-        font-size: 28px;
         font-weight: 700;
-        margin: 3px 0;
-    }
-    .metric-label {
+        text-transform: uppercase;
+        letter-spacing: .7px;
+    }}
+
+    /* ==============================
+       BOTONES
+       ============================== */
+    .stButton > button {{
+        width: 100%;
+        min-height: 54px;
+        border-radius: 14px !important;
+        border: 1px solid #dbe3ef !important;
+        background: white !important;
+        color: {COLOR_PRIMARIO} !important;
+        font-weight: 750 !important;
+        font-size: 15px !important;
+        box-shadow: 0 5px 15px rgba(15,23,42,.06) !important;
+        transition: all .18s ease !important;
+    }}
+
+    .stButton > button:hover {{
+        transform: translateY(-2px);
+        border-color: {COLOR_SECUNDARIO} !important;
+        background: #eff6ff !important;
+        color: {COLOR_SECUNDARIO} !important;
+        box-shadow: 0 9px 22px rgba(37,99,235,.14) !important;
+    }}
+
+    /* Botones de acción */
+    .stButton > button:focus {{
+        box-shadow: 0 0 0 3px rgba(37,99,235,.18) !important;
+    }}
+
+    /* ==============================
+       INPUTS
+       ============================== */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"],
+    .stNumberInput input,
+    .stTextInput input {{
+        border-radius: 12px !important;
+        border: 1px solid #d8e0eb !important;
+        background: white !important;
+    }}
+
+    label {{
+        font-weight: 650 !important;
+        color: #334155 !important;
+    }}
+
+    /* ==============================
+       TABLAS
+       ============================== */
+    [data-testid="stDataFrame"] {{
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 5px 18px rgba(15,23,42,.05);
+    }}
+
+    /* ==============================
+       ALERTAS / MENSAJES
+       ============================== */
+    .stAlert {{
+        border-radius: 14px !important;
+        border: 1px solid rgba(148,163,184,.25) !important;
+    }}
+
+    /* ==============================
+       REGISTROS
+       ============================== */
+    .movement-card {{
+        background: white;
+        border: 1px solid #e7ecf3;
+        border-left: 4px solid {COLOR_SECUNDARIO};
+        border-radius: 13px;
+        padding: 13px 16px;
+        margin-bottom: 9px;
+        box-shadow: 0 4px 13px rgba(15,23,42,.045);
+    }}
+
+    .success-card {{
+        background: linear-gradient(135deg, #f0fdf4, #ffffff);
+        border: 1px solid #bbf7d0;
+        border-left: 5px solid {COLOR_EXITO};
+        border-radius: 15px;
+        padding: 17px;
+    }}
+
+    /* ==============================
+       FOOTER
+       ============================== */
+    .footer {{
+        text-align: center;
+        color: #64748b;
         font-size: 12px;
-        color: #666;
-        font-weight: 500;
-    }
+        margin-top: 35px;
+        padding: 16px;
+        border-top: 1px solid #e2e8f0;
+    }}
+
+    /* Separadores más suaves */
+    hr {{
+        border: none;
+        border-top: 1px solid #e5eaf2;
+        margin: 20px 0;
+    }}
+
+    /* Móvil */
+    @media (max-width: 700px) {{
+        .header-shell {{ padding: 20px; border-radius: 18px; }}
+        .header-title {{ font-size: 24px; }}
+        .header-container img {{ width: 58px; height: 58px; }}
+        .header-subtitle {{ margin-left: 76px; }}
+    }}
 </style>
+""", unsafe_allow_html=True)
+
+# ===== HEADER CON LOGO + TÍTULO =====
+LOGO_URL = "https://i.ibb.co/d4NTj1CV/logo.png"
+
+st.markdown(f"""
+<div class="header-shell">
+    <div class="header-container">
+        <img src="{LOGO_URL}" alt="Logo Iglesia">
+        <div>
+            <div class="header-title">BODEGA IGLESIA</div>
+            <div style="color:rgba(255,255,255,.72);font-size:13px;margin-top:5px;">
+                Control de inventario y movimientos
+            </div>
+        </div>
+    </div>
+    <div class="header-subtitle">
+        Administración simple · ordenada · segura
+    </div>
+</div>
 """, unsafe_allow_html=True)
 
 # ===== BASE DE DATOS =====
@@ -282,15 +498,10 @@ if 'ultimo_registro' not in st.session_state:
     st.session_state.ultimo_registro = {}
 
 # ============================================
-# ===== MENÚ PRINCIPAL (WIZARD NIVEL 1) =====
+# ===== MENÚ PRINCIPAL =====
 # ============================================
 def menu_principal():
-    st.markdown('<div class="main-title">🏪 BODEGA IGLESIA</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">Administración Simple</div>', unsafe_allow_html=True)
-    st.markdown("---")
-    
-    # ===== 3 OPCIONES PRINCIPALES =====
-    st.markdown("### 📋 Selecciona una opción:")
+    st.markdown('<div class="section-title">Panel principal</div><div class="section-caption">Selecciona una operación para comenzar.</div>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
@@ -325,7 +536,7 @@ def menu_principal():
 # ===== SUBMENÚ: SALIDA DE PRODUCTOS ========
 # ============================================
 def submenu_salida():
-    st.markdown("### 📤 SALIDA DE PRODUCTOS")
+    st.markdown('<div class="section-title">📤 Salida de productos</div><div class="section-caption">Registra, consulta y administra las salidas de inventario.</div>', unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
@@ -359,7 +570,7 @@ def submenu_salida():
 # ===== SUBMENÚ: VER STOCK ==================
 # ============================================
 def submenu_stock():
-    st.markdown("### 📦 VER STOCK")
+    st.markdown('<div class="section-title">📦 Inventario</div><div class="section-caption">Consulta el stock disponible y detecta productos críticos.</div>', unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
@@ -368,7 +579,7 @@ def submenu_stock():
     
     st.markdown("---")
     
-    # ===== MÉTRICAS DENTRO DE VER STOCK =====
+    # ===== MÉTRICAS =====
     resumen = get_resumen()
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -419,14 +630,13 @@ def submenu_stock():
 # ===== SUBMENÚ: SALIDA DE HOY ==============
 # ============================================
 def submenu_hoy():
-    st.markdown("### 📋 SALIDA DE HOY")
+    st.markdown('<div class="section-title">📋 Movimientos de hoy</div><div class="section-caption">Resumen de las operaciones registradas durante el día.</div>', unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("🔙 VOLVER AL MENÚ PRINCIPAL", use_container_width=True):
         st.session_state.pagina = "menu_principal"
         st.rerun()
     
-    # Mostrar resumen del día
     resumen = get_resumen()
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -438,13 +648,12 @@ def submenu_hoy():
     
     st.markdown("---")
     
-    # Mostrar salidas del día
     salidas = get_salidas_hoy()
     if salidas:
         st.markdown("#### 📤 Salidas registradas hoy:")
         for s in salidas:
             st.markdown(f"""
-            <div style="background: white; border-radius: 10px; padding: 10px; margin-bottom: 8px; border-left: 3px solid #FF6B6B;">
+            <div class="movement-card">
                 <b>🕐 {s[0][11:16]}</b> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
                 <span style="color: #666; font-size: 13px;">Motivo: {s[4]}</span>
             </div>
@@ -470,7 +679,7 @@ def submenu_hoy():
 
 # --- REGISTRAR SALIDA ---
 def registrar_salida_accion():
-    st.markdown("### ✏️ REGISTRAR SALIDA")
+    st.markdown('<div class="section-title">✏️ Registrar salida</div><div class="section-caption">Ingresa los datos del producto que será retirado.</div>', unsafe_allow_html=True)
     
     if st.button("🔙 VOLVER AL SUBMENÚ", use_container_width=True):
         st.session_state.pagina = "submenu_salida"
@@ -484,7 +693,7 @@ def registrar_salida_accion():
         st.warning("No hay productos registrados")
         return
     
-    opciones = {f"{p[1]} ({p[2]} {p[4]})": p for p in productos}
+    opciones = {p[1]: p for p in productos}
     seleccion = st.selectbox("Seleccionar producto:", list(opciones.keys()))
     producto = opciones[seleccion]
     
@@ -536,12 +745,11 @@ def registrar_salida_accion():
             st.session_state.salida_registrada = False
             st.rerun()
     
-    # Mostrar último registro si existe
     if st.session_state.salida_registrada and st.session_state.ultimo_registro:
         ult = st.session_state.ultimo_registro
         st.markdown("---")
         st.markdown(f"""
-        <div style="background: #e8f5e9; border-radius: 12px; padding: 15px; border-left: 4px solid #00C853;">
+        <div class="success-card">
             <b>✅ Última salida registrada:</b><br>
             📦 {ult['producto']} | <b>-{ult['cantidad']}</b> {ult['unidad']}<br>
             📝 Motivo: {ult['motivo']}<br>
@@ -555,7 +763,7 @@ def registrar_salida_accion():
 
 # --- VER STOCK COMPLETO ---
 def ver_stock_completo():
-    st.markdown("### 📦 STOCK COMPLETO")
+    st.markdown('<div class="section-title">📦 Stock completo</div><div class="section-caption">Inventario organizado por categoría.</div>', unsafe_allow_html=True)
     
     if st.button("🔙 VOLVER", use_container_width=True):
         if st.session_state.menu_anterior == "principal":
@@ -590,7 +798,7 @@ def ver_stock_completo():
 
 # --- STOCK CRÍTICO ---
 def ver_criticos():
-    st.markdown("### ⚠️ STOCK CRÍTICO")
+    st.markdown('<div class="section-title">⚠️ Stock crítico</div><div class="section-caption">Productos que se encuentran bajo el mínimo configurado.</div>', unsafe_allow_html=True)
     
     if st.button("🔙 VOLVER", use_container_width=True):
         st.session_state.pagina = "submenu_salida"
@@ -624,7 +832,7 @@ def ver_salidas_hoy():
         total = 0
         for s in salidas:
             st.markdown(f"""
-            <div style="background: white; border-radius: 10px; padding: 10px; margin-bottom: 8px; border-left: 3px solid #FF6B6B;">
+            <div class="movement-card">
                 <b>🕐 {s[0][11:16]}</b> | {s[1]} | <b>-{s[2]}</b> {s[3]}<br>
                 <span style="color: #666; font-size: 13px;">Motivo: {s[4]}</span>
             </div>
@@ -636,7 +844,7 @@ def ver_salidas_hoy():
 
 # --- AJUSTAR STOCK ---
 def ajustar_stock():
-    st.markdown("### ✏️ AJUSTAR STOCK")
+    st.markdown('<div class="section-title">✏️ Ajustar stock</div><div class="section-caption">Corrige existencias dejando registro para auditoría.</div>', unsafe_allow_html=True)
     st.warning("⚠️ Este cambio quedará registrado para auditoría")
     
     if st.button("🔙 VOLVER", use_container_width=True):
@@ -650,7 +858,7 @@ def ajustar_stock():
         st.warning("No hay productos")
         return
     
-    opciones = {f"{p[1]} ({p[2]} {p[4]})": p for p in productos}
+    opciones = {p[1]: p for p in productos}
     seleccion = st.selectbox("Seleccionar producto:", list(opciones.keys()))
     producto = opciones[seleccion]
     
